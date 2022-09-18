@@ -7,9 +7,11 @@ const deleteUserService = async (id: string) => {
 
     const userRepository = AppDataSource.getRepository(User)
 
-    const users = await userRepository.find()
-
-    const user = users.find(u => u.id == id)
+    const user = await userRepository.findOne({
+        where: {
+            id: id
+        }
+    })
 
     if(!user) {
 

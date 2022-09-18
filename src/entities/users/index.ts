@@ -1,13 +1,12 @@
-import { Entity, PrimaryColumn, Column, JoinTable, ManyToMany } from "typeorm"
+import { Entity, Column, JoinTable, ManyToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { v4 as uuid } from "uuid"
 import { Book } from "../book"
 
 
-@Entity()
-
+@Entity("users")
 export class User {
 
-    @PrimaryColumn("uuid")
+    @PrimaryGeneratedColumn("uuid")
     readonly id: string
 
     @Column()
@@ -22,10 +21,10 @@ export class User {
     @Column()
     phone: string
 
-    @Column()
+    @CreateDateColumn()
     created_at: Date
 
-    @Column()
+    @UpdateDateColumn()
     updated_at: Date
 
     @ManyToMany(type => Book ,{

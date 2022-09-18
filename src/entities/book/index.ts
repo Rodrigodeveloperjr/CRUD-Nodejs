@@ -1,12 +1,12 @@
-import { Entity, PrimaryColumn, Column, OneToMany } from "typeorm"
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm"
 import { v4 as uuid } from "uuid"
 import { User } from "../users"
 
 
-@Entity()
+@Entity("book")
 export class Book {
 
-    @PrimaryColumn("uuid")
+    @PrimaryGeneratedColumn("uuid")
     readonly id: string
 
     @Column()
@@ -18,10 +18,10 @@ export class Book {
     @Column()
     pages: number
 
-    @Column()
+    @CreateDateColumn()
     created_at: Date
 
-    @Column()
+    @UpdateDateColumn()
     updated_at: Date
 
     @OneToMany(type => User, user => user.books)

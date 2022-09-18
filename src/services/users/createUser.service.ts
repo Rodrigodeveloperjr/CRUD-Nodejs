@@ -9,36 +9,31 @@ const createUserService = async ({ name, email, password, phone }: IUserCreate) 
 
     const userRepository = AppDataSource.getRepository(User)
 
-    const users = await userRepository.find()
+    const user = await userRepository.findOne({
+        where: {
+            email: email
+        }
+    })
 
     const hashPassword = bcrypt.hashSync(password, 10)
 
-    if(users.find(u => u.email == email)) {
+    if(user) {
 
         throw new appError(409, "Email already registered")
     }
 
-    const user = new User()
-    user.name = name
-    user.email = email
-    user.password = hashPassword
-    user.phone = phone
-    user.created_at = new Date()
-    user.updated_at = new Date()
+    const Newuser = new User()
+    Newuser.name = name
+    Newuser.email = email
+    Newuser.password = password
+    Newuser.phone = phone
+    Newuser.created_at = new Date()
+    Newuser.updated_at = new Date()
 
-    userRepository.create(user)
-    await userRepository.save(user)
+    userRepository.create(Newuser)
+    await userRepository.save(Newuser)
 
-    const copyUser = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        created_at: user.created_at,
-        updated_at: user.updated_at
-    }
-
-    return copyUser
+    return Newuser
 }
 
 export default createUserService

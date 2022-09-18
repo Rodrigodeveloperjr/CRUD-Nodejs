@@ -2,17 +2,12 @@ import { AppDataSource } from "../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
 import app from "../../app"
+import { userCreate } from "../mocks"
 
 
-describe("Teste para o metodo POST em /users", () => {
+describe("Test for POST method in /users", () => {
 
     let connection: DataSource
-
-    let testUser = {
-        name: "rodrigo",
-        email: "rodrigo@gmail.com",
-        phone: "11995324335"
-    }
 
     beforeAll(async () => {
 
@@ -25,16 +20,17 @@ describe("Teste para o metodo POST em /users", () => {
 
     test("Should insert the information of the new user in the database", async () => {
 
-        const response = await request(app).post("/users").send(testUser)
+        const response = await request(app).post("/users").send(userCreate)
 
         expect(response.status).toBe(201)
 
         expect(response.body).toEqual(
             expect.objectContaining({
                 id: response.body.id,
-                name: testUser.name,
-                email: testUser.email,
-                phone: testUser.phone,
+                name: userCreate.name,
+                email: userCreate.email,
+                password: userCreate.password,
+                phone: userCreate.phone,
                 created_at: response.body.created_at,
                 updated_at: response.body.updated_at
             })

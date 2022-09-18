@@ -7,9 +7,11 @@ const deleteBookService = async (id: string) => {
 
     const bookRepository = AppDataSource.getRepository(Book)
 
-    const books = await bookRepository.find()
-
-    const book = books.find(u => u.id == id)
+    const book = await bookRepository.findOne({
+        where: {
+            id: id
+        }
+    })
 
     if(!book) {
 

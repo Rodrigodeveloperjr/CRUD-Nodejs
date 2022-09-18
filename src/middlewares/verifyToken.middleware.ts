@@ -10,8 +10,6 @@ const verifyTokenMiddleware = async (req: Request, res: Response, next: NextFunc
 
         jwt.verify(token as string, process.env.JWT_SECRET as string, (err: any, decoded: any) => {
 
-                req.userEmail = decoded.email
-
                 if(err) {
 
                     return res.status(401).json({ message: "Invalid Token" })

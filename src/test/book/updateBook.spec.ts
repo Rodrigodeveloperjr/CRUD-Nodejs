@@ -2,17 +2,12 @@ import { AppDataSource } from "../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
 import app from "../../app"
+import { userCreate, loginCreate, bookUpdated } from "../mocks"
 
 
-describe("Teste para o metodo PATCH em /book", () => {
+describe("Test for PATCH method in /book", () => {
 
     let connection: DataSource
-
-    let testBook = {
-        name: "JavaScript and Jquery: Interactive Front-End Web Development",
-        author: "Jon Duckett",
-        pages: 640
-    }
 
     let response1: any
 
@@ -22,35 +17,40 @@ describe("Teste para o metodo PATCH em /book", () => {
         .then(res => connection = res)
         .catch(err => console.log("Error during Data Source initialization", err))
 
-        response1 = await request(app).post("/book").send(testBook)
+        await request(app).post("/users").send(userCreate)
     })
 
     afterAll(async () => await connection.destroy())
 
-    test("Tentando atualizar um book", async () => {
+    test("Trying to update a book", async () => {
 
-        const response = await request(app).patch(`/book/${response1.body.id}`)
+        const token = await request(app).post("/login").send(loginCreate)
 
-        expect(response.status).toEqual(200)
-        expect(response.body).toHaveProperty("message")
+        response1 = await request(app).post("/book").send(bookUpdated).set("Authorization", `Bearer ${ token.body.token }`)
+
+        const response = await request(app).patch(`/book/${response1.body.id}`).set("Authorization", `Bearer ${ token.body.token }`)
+
+        expect(response.status).toBe(200)
 
         expect(response.body).toEqual(
             expect.objectContaining({
                 id: response.body.id,
-                name: testBook.name,
-                author: testBook.author,
-                pages: testBook.pages,
+                name: bookUpdated.name,
+                author: bookUpdated.author,
+                pages: bookUpdated.pages,
                 created_at: response.body.created_at,
                 updated_at: response.body.updated_at
             })
         )
     })
 
-    test("Tentando atualizar um book inexistente", async () => {
+    test("Trying to update a non-existent book", async () => {
 
-        const response = await request(app).patch("/book/12")
+        const token = await request(app).post("/login").send(loginCreate)
 
-        expect(response.status).toEqual(404)
+        const response = await request(app).patch("/book/12").set("Authorization", `Bearer ${ token.body.token }`)
+
+        expect(response.status).toBe(404)
         expect(response.body).toHaveProperty("message")
     })
 })

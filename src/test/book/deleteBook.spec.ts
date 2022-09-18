@@ -2,23 +2,12 @@ import { AppDataSource } from "../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
 import app from "../../app"
+import { bookDeleted, userCreate, loginCreate } from "../mocks"
 
 
-describe("Teste para o metodo DELETE em /book", () => {
+describe("Test for DELETE method in /book", () => {
 
     let connection: DataSource
-
-    interface Book {
-        name: string
-        author: string
-        pages: number
-    }
-
-    let testBook: Book = {
-        name: "PHP & MySQL: Server-Side Web Development",
-        author: "Jon Duckett",
-        pages: 672
-    }
 
     let response1: any
 
@@ -28,22 +17,28 @@ describe("Teste para o metodo DELETE em /book", () => {
         .then(res => connection = res)
         .catch(err => console.error("Error during Data Source initialization", err))
 
-        response1 = await request(app).post("/book").send(testBook)
+        await request(app).post("/users").send(userCreate)
     })
 
     afterAll(async () => await connection.destroy())
 
-    test("Tentando deletar um book", async () => {
+    test("Trying to delete a book", async () => {
 
-        const response = await request(app).delete(`/book/${response1.body.id}`)
+        const token = await request(app).post("/login").send(loginCreate)
+        
+        response1 = await request(app).post("/book").send(bookDeleted).set("Authorization", `Bearer ${ token.body.token }`)
+
+        const response = await request(app).delete(`/book/${response1.body.id}`).set("Authorization", `Bearer ${ token.body.token }`)
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty("message")
     })
     
-    test("Tentando deletar um book inexistente", async () => {
-        
-        const response = await request(app).delete("/book/21")
+    test("Trying to delete a non-existent book", async () => {
+
+        const token = await request(app).post("/login").send(loginCreate)
+
+        const response = await request(app).delete("/book/21").set("Authorization", `Bearer ${ token.body.token }`)
 
         expect(response.status).toBe(404)
         expect(response.body).toHaveProperty("message")

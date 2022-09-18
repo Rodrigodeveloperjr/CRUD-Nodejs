@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { appError, handleError } from "../../errors/appError"
-import userLoginService from "../../services/users/loginUser.service"
+import userLoginService from "../../services/sessions/loginUser.service"
 
 
 const userLoginController = async (req: Request, res: Response) => {

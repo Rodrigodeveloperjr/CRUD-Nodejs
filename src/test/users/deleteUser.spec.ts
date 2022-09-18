@@ -2,25 +2,12 @@ import { AppDataSource } from "../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
 import app from "../../app"
+import { userDeleted } from "../mocks"
 
 
-describe("Teste para o metodo DELETE em /users", () => {
+describe("Test for DELETE method in /users", () => {
 
     let connection: DataSource
-
-    interface User {
-        name: string
-        email: string
-        password: string
-        phone: string
-    }
-
-    let testUser: User = {
-        name: "rodrigo",
-        email: "rodrigonohype@gmail.com",
-        password: "52640894854",
-        phone: "11995324335"
-    }
 
     let response1: any
 
@@ -30,12 +17,12 @@ describe("Teste para o metodo DELETE em /users", () => {
         .then(res => connection = res)
         .catch(err => console.error("Error during Data Source initialization", err))
 
-        response1 = await request(app).post("/users").send(testUser)
+        response1 = await request(app).post("/users").send(userDeleted)
     })
 
     afterAll(async () => await connection.destroy())
 
-    test("Tentando deletar um user", async () => {
+    test("Trying to delete a user", async () => {
 
         const response = await request(app).delete(`/users/${response1.body.id}`)
 
@@ -43,7 +30,7 @@ describe("Teste para o metodo DELETE em /users", () => {
         expect(response.body).toHaveProperty("message")
     })
 
-    test("Tentando deletar um user inexistente", async () => {
+    test("Trying to delete a non-existent user", async () => {
 
         const response = await request(app).delete("/users/12")
 

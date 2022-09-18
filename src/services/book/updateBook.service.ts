@@ -7,16 +7,18 @@ const updateBookService = async (id: string, name: string, author: string, pages
 
     const bookRepository = AppDataSource.getRepository(Book)
 
-    const books = await bookRepository.find()
-
-    const book = books.find(u => u.id == id)
+    const book = await bookRepository.findOne({
+        where: {
+            id: id
+        }
+    })
 
     if(!book) {
 
         throw new appError(404, "Book not found")
     }
 
-    await bookRepository.update(book!.id, { name: name, author: author, pages: pages })
+    await bookRepository.update(book!.id, { name: name, author: author, pages: pages, updated_at: new Date() })
 
     return book
 }

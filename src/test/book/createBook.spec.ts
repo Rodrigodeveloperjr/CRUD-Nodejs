@@ -2,38 +2,40 @@ import { AppDataSource } from "../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
 import app from "../../app"
+import { bookCreate, userCreate, loginCreate } from "../mocks"
 
 
-describe("Teste para o metodo POST em /book", () => {
+describe("Test for POST method in /book", () => {
 
     let connection: DataSource
-
-    let bookData = {
-        name: "HTML and CSS: Design and Build Websites",
-        author: "Jon Duckett",
-        pages: 512
-    }
 
     beforeAll(async () => {
 
         await AppDataSource.initialize()
         .then(res => connection = res)
         .catch(err => console.error("Error during Data Source initialization", err))
+
+        await request(app).post("/users").send(userCreate)
     })
 
     afterAll(async () => await connection.destroy())
 
     test("Should insert the information of the new book in the database", async () => {
 
-        const response = await request(app).post("/book").send(bookData)
+        const token = await request(app).post("/login").send(loginCreate)
+
+        const response = await request(app).post("/book").set("Authorization", `Bearer ${ token.body.token }`).send(bookCreate)
 
         expect(response.status).toBe(201)
 
         expect(response.body).toEqual(
             expect.objectContaining({
-                name: bookData.name,
-                author: bookData.author,
-                pages: bookData.pages
+                id: response.body.id,
+                name: bookCreate.name,
+                author: bookCreate.author,
+                pages: bookCreate.pages,
+                created_at: response.body.created_at,
+                updated_at: response.body.updated_at
             })
         )
     })

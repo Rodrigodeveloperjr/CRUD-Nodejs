@@ -10,13 +10,15 @@ const userLoginService = async ({ email, password }: IUserLogin) => {
 
     const userRepository = AppDataSource.getRepository(User)
 
-    const users = await userRepository.find()
-
-    const user = users.find(u => u.email == email)
+    const user = await userRepository.findOne({
+        where: {
+            email: email
+        }
+    })
 
     if(!user) {
 
-        throw new appError(403, "User not found")
+        throw new appError(404, "User not found")
     }
 
     if(bcrypt.compareSync(password, user.password)) {

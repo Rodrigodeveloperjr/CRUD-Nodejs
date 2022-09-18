@@ -12,7 +12,7 @@ const updateUserController = async (req: Request, res: Response) => {
 
         const updatedUser = await updateUserService(id, name, email, password, phone)
 
-        return res.status(200).json({ message: "User updated", user: updatedUser })
+        return res.status(200).json(updatedUser)
 
     } catch(err) {
 

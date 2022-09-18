@@ -12,7 +12,7 @@ const updateBookController = async (req: Request, res: Response) => {
 
         const updatedBook = await updateBookService(id, name, author, pages)
 
-        return res.status(200).json({ message: "Book updated", book: updatedBook })
+        return res.status(200).json(updatedBook)
 
     } catch(err) {
 

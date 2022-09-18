@@ -4,7 +4,7 @@ import app from "../../app"
 import request from "supertest"
 
 
-describe("Teste para o metodo GET em /users", () => {
+describe("Test for GET method in /users", () => {
 
     let connection: DataSource
 
