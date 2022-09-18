@@ -1,13 +1,13 @@
 import { Router } from "express"
 
-import userLoginController from "../../controllers/sessions/loginUser.controller"
+import sessionController from "../../controllers/session/session.controller"
 
 
 const routes = Router()
 
 const sessionsRoutes = () => {
 
-    routes.post("/", userLoginController)
+    routes.post("/", sessionController)
 
     return routes
 }

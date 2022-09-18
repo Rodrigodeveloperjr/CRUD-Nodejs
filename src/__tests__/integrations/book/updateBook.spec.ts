@@ -1,15 +1,13 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
-import app from "../../app"
-import { userCreate, loginCreate, bookUpdated } from "../mocks"
+import app from "../../../app"
+import { userCreate, loginCreate, bookUpdated } from "../../mocks"
 
 
 describe("Test for PATCH method in /book", () => {
 
     let connection: DataSource
-
-    let response1: any
 
     beforeAll(async () => {
 
@@ -26,9 +24,9 @@ describe("Test for PATCH method in /book", () => {
 
         const token = await request(app).post("/login").send(loginCreate)
 
-        response1 = await request(app).post("/book").send(bookUpdated).set("Authorization", `Bearer ${ token.body.token }`)
+        const book = await request(app).post("/book").send(bookUpdated).set("Authorization", `Bearer ${ token.body.token }`)
 
-        const response = await request(app).patch(`/book/${response1.body.id}`).set("Authorization", `Bearer ${ token.body.token }`)
+        const response = await request(app).patch(`/book/${ book.body.id }`).set("Authorization", `Bearer ${ token.body.token }`)
 
         expect(response.status).toBe(200)
 

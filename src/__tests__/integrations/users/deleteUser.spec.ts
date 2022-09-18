@@ -1,30 +1,28 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
-import app from "../../app"
-import { userDeleted } from "../mocks"
+import app from "../../../app"
+import { userCreate } from "../../mocks"
 
 
 describe("Test for DELETE method in /users", () => {
 
     let connection: DataSource
 
-    let response1: any
-
     beforeAll(async () => {
 
         await AppDataSource.initialize()
         .then(res => connection = res)
         .catch(err => console.error("Error during Data Source initialization", err))
-
-        response1 = await request(app).post("/users").send(userDeleted)
     })
 
     afterAll(async () => await connection.destroy())
 
     test("Trying to delete a user", async () => {
 
-        const response = await request(app).delete(`/users/${response1.body.id}`)
+        const user = await request(app).post("/users").send(userCreate)
+
+        const response = await request(app).delete(`/users/${ user.body.id }`)
 
         expect(response.status).toBe(200)
         expect(response.body).toHaveProperty("message")

@@ -1,8 +1,8 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
-import app from "../../app"
-import { bookCreate, userCreate, loginCreate } from "../mocks"
+import app from "../../../app"
+import { bookCreate, userCreate, loginCreate } from "../../mocks"
 
 
 describe("Test for POST method in /book", () => {
@@ -20,14 +20,13 @@ describe("Test for POST method in /book", () => {
 
     afterAll(async () => await connection.destroy())
 
-    test("Should insert the information of the new book in the database", async () => {
+    test("Trying to create a new book", async () => {
 
         const token = await request(app).post("/login").send(loginCreate)
 
         const response = await request(app).post("/book").set("Authorization", `Bearer ${ token.body.token }`).send(bookCreate)
 
         expect(response.status).toBe(201)
-
         expect(response.body).toEqual(
             expect.objectContaining({
                 id: response.body.id,

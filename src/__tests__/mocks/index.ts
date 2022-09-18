@@ -14,17 +14,11 @@ export const bookUpdated: IBookCreate = {
     pages: 672
 }
 
-export const bookDeleted: IBookCreate = {
-    name: "JavaScript and Jquery: Interactive Front-End Web Development",
-    author: "Jon Duckett",
-    pages: 640
-}
-
 export const userCreate: IUserCreate = {
-    name: "rodrigo",
-    email: "rodrigo@gmail.com",
-    password: "52640894854",
-    phone: "11995324335"
+    name: "example",
+    email: "example@org.com.br",
+    password: "example",
+    phone: "99 99999-9999"
 }
 
 export const userUpdated: IUserCreate = {
@@ -34,19 +28,12 @@ export const userUpdated: IUserCreate = {
     phone: "11995324335"
 }
 
-export const userDeleted: IUserCreate = {
-    name: "rodrigo",
-    email: "rodrigojsdeveloper@gmail.com",
-    password: "52640894854",
-    phone: "11995324335"
-}
-
 export const loginCreate: IUserLogin = {
-    email: "rodrigo@gmail.com",
-    password: "52640894854"
+    email: "example@org.com.br",
+    password: "example"
 }
 
 export const loginInvalid: IUserLogin = {
-    email: "example@org.com",
-    password: "123example"
+    email: "rodrigo@org.com.br",
+    password: "example.org"
 }

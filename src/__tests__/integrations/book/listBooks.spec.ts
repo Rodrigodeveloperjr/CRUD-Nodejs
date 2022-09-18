@@ -1,8 +1,8 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
-import app from "../../app"
-import { userCreate, loginCreate } from "../mocks"
+import app from "../../../app"
+import { userCreate, loginCreate } from "../../mocks"
 
 
 describe("Test for GET method in /book", () => {
@@ -20,7 +20,7 @@ describe("Test for GET method in /book", () => {
 
     afterAll(async () => await connection.destroy())
 
-    test("Should list all registered books", async () => {
+    test("Trying to list all the books", async () => {
 
         const token = await request(app).post("/login").send(loginCreate)
 

@@ -1,8 +1,8 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
 import request from "supertest"
-import app from "../../app"
-import { userCreate } from "../mocks"
+import app from "../../../app"
+import { userCreate } from "../../mocks"
 
 
 describe("Test for POST method in /users", () => {
@@ -18,12 +18,11 @@ describe("Test for POST method in /users", () => {
 
     afterAll(async () => await connection.destroy())
 
-    test("Should insert the information of the new user in the database", async () => {
+    test("Trying to create a new user", async () => {
 
         const response = await request(app).post("/users").send(userCreate)
 
         expect(response.status).toBe(201)
-
         expect(response.body).toEqual(
             expect.objectContaining({
                 id: response.body.id,

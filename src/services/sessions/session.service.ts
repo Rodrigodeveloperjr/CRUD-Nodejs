@@ -6,7 +6,7 @@ import { appError } from "../../errors/appError"
 import * as bcrypt from "bcrypt"
 
 
-const userLoginService = async ({ email, password }: IUserLogin) => {
+const sessionService = async ({ email, password }: IUserLogin) => {
 
     const userRepository = AppDataSource.getRepository(User)
 
@@ -31,4 +31,4 @@ const userLoginService = async ({ email, password }: IUserLogin) => {
     return { token: token }
 }
 
-export default userLoginService
+export default sessionService

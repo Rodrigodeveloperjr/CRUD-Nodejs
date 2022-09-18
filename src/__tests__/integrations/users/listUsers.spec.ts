@@ -1,6 +1,6 @@
-import { AppDataSource } from "../../data-source"
+import { AppDataSource } from "../../../data-source"
 import { DataSource } from "typeorm"
-import app from "../../app"
+import app from "../../../app"
 import request from "supertest"
 
 
@@ -17,7 +17,7 @@ describe("Test for GET method in /users", () => {
 
     afterAll(async () => await connection.destroy())
 
-    test("Should list all registered users", async () => {
+    test("Trying to list all the users", async () => {
 
         const response = await request(app).get("/users")
 
